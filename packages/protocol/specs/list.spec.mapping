@@ -1,0 +1,17 @@
+
+mapping elementIndex(uint256 key)
+{
+    preserved insert(uint256 newKey, uint256 value, uint256 lesserKey, uint256 greaterKey) {
+        uint256 retIndex;
+        require key == newKey && lesserKey == 0 => retIndex == 0;
+        require key == newKey && lesserKey != 0 => retIndex == elementIndex[lesserKey] + 1;
+        require key < newKey => retIndex == elementIndex[key] ;
+        require key > newKey => retIndex == elementIndex[key] + 1;
+        return retIndex;
+    }
+}
+
+invariant elementIndex[getTail()] == getNumElements()
+
+
+invariant numElementsNonEmpty(uint256 key) sinvoke contains(key) => sinvoke getNumElements() > 0
