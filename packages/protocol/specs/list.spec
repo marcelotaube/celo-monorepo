@@ -25,44 +25,6 @@ invariant greaterContained(uint256 key) sinvoke contains(key) && sinvoke getElem
 		call extraRemoveInstance(key, greater_key, lesser_key);
 		requireInvariant greaterContained(key);
 		requireInvariant greaterContained(lesser_key);
-
-		/*
-		uint256 greater_key = sinvoke getElementGreater(key);
-		uint256 lesser_key = sinvoke getElementLesser(key);
-		requireInvariant firstKey(key);
-		requireInvariant firstKey(greater_key);
-		requireInvariant firstKey(lesser_key);
-		requireInvariant reciprocal1(key);
-		requireInvariant reciprocal2(key);
-		requireInvariant greaterContained(key);
-		requireInvariant greaterContained(lesser_key);
-
-		requireInvariant hasHead2();
-		requireInvariant hasTail();
-		requireInvariant hasTail2();
-		uint256 greater_byeKey = sinvoke getElementGreater(byeKey);
-		uint256 lesser_byeKey = sinvoke getElementLesser(byeKey);
-	
-		requireInvariant firstKey(byeKey);
-		requireInvariant firstKey(greater_byeKey);
-		requireInvariant firstKey(lesser_byeKey);
-		requireInvariant greaterContained(byeKey);
-		requireInvariant lesserContained(byeKey);
-		
-
-		requireInvariant reciprocal1(byeKey);
-		requireInvariant reciprocal2(byeKey);
-
-		requireInvariant containsNotZero();
-
-
-		requireInvariant greaterContained(byeKey);
-		requireInvariant greaterContained(greater_byeKey);
-
-		requireInvariant greaterContained(greater_byeKey);
-		requireInvariant greaterContained(lesser_byeKey);
-		*/
-
 	}
 
 
