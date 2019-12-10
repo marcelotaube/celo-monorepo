@@ -58,4 +58,8 @@ contract SortedListCheck {
 	function getValue(uint256 key) public returns (uint256) {
 		return l.getValue(bytes32(key));
 	}
+
+	function init_state() public {
+		l.list.numElements = 1;
+	}
 }

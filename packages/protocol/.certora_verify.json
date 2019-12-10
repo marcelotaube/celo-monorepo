@@ -1,0 +1,7 @@
+[
+    {
+        "primary_contract": "SortedListCheck",
+        "specfile": ".certora_config/0_list.spec",
+        "type": "spec"
+    }
+]
