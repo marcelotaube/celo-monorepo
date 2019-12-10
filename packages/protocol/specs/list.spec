@@ -19,7 +19,8 @@ invariant greaterContained(uint256 key) sinvoke contains(key) && sinvoke getElem
 {
 	preserved remove(uint256 byeKey)
 	{
-		call basicRemoveInstances(byeKey);
+		uint256 greater_byeKey, lesser_byeKey;
+		call basicRemoveInstances(byeKey, greater_byeKey, lesser_byeKey);
 
 		uint256 greater_key, lesser_key;
 		call extraRemoveInstance(key, greater_key, lesser_key);
@@ -104,19 +105,15 @@ invariant lesserContained(uint256 key) sinvoke contains(key) && sinvoke getEleme
 {
 	preserved remove(uint256 byeKey)
 	{
-		uint256 greater_key = sinvoke getElementGreater(key);
-		uint256 lesser_key = sinvoke getElementLesser(key);
-		requireInvariant firstKey(key);
-		requireInvariant firstKey(greater_key);
-		requireInvariant firstKey(lesser_key);
-		requireInvariant reciprocal1(key);
-		requireInvariant reciprocal2(key);
+		uint256 greater_byeKey, lesser_byeKey;
+		call basicRemoveInstances(byeKey, greater_byeKey, lesser_byeKey);
+
+		uint256 greater_key, lesser_key;
+		call extraRemoveInstance(key, greater_key, lesser_key);
+		requireInvariant greaterContained(key);
+		requireInvariant greaterContained(lesser_key);
 		requireInvariant lesserContained(key);
 		requireInvariant lesserContained(lesser_key);
-
-
-		call basicRemoveInstances(byeKey);
-
 	}
 
 	preserved update(uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey)
@@ -202,64 +199,14 @@ invariant reciprocal1(uint256 key) sinvoke contains(key) && sinvoke getElementLe
 		requireInvariant greaterContained(key);
 		uint256 greater_key, lesser_key;
 		call extraRemoveInstance(key, greater_key, lesser_key);
-
-
-		/*
-		uint256 greater_key = sinvoke getElementGreater(key);
-		uint256 lesser_key = sinvoke getElementLesser(key);
-		requireInvariant firstKey(greater_key);
-		requireInvariant firstKey(lesser_key);
-		requireInvariant reciprocal1(key);
-		requireInvariant reciprocal2(key);
-
-		*/
-
-		/*
-		requireInvariant reciprocal1(newKey);
-		requireInvariant reciprocal2(newKey);
-		requireInvariant reciprocal1(newLesserKey);
-		requireInvariant reciprocal2(newLesserKey);
-		requireInvariant reciprocal1(newGreaterKey);
-		requireInvariant reciprocal2(newGreaterKey);
-
-		requireInvariant lesserContained(key);
-		requireInvariant lesserContained(newKey);
-		requireInvariant greaterContained(key);
-		requireInvariant greaterContained(newKey);*/
-
 	}
 
 	preserved remove(uint256 byeKey)
 	{
-		call basicRemoveInstances(byeKey);
+		uint256 greater_byeKey, lesser_byeKey;
+		call basicRemoveInstances(byeKey, greater_byeKey, lesser_byeKey);
 		uint256 greater_key, lesser_key;
 		call extraRemoveInstance(key, greater_key, lesser_key);
-
-		/*
-			uint256 greater_key = sinvoke getElementGreater(key);
-			uint256 lesser_key = sinvoke getElementLesser(key);
-			requireInvariant firstKey(key);
-			requireInvariant firstKey(greater_key);
-			requireInvariant firstKey(lesser_key);
-			requireInvariant reciprocal1(key);
-			requireInvariant reciprocal2(key);
-		*/
-
-		/*
-			uint256 greater_byeKey = sinvoke getElementGreater(byeKey);
-			uint256 lesser_byeKey = sinvoke getElementLesser(byeKey);
-			requireInvariant hasHead2();
-			requireInvariant hasTail();
-			requireInvariant hasTail2();
-			requireInvariant firstKey(byeKey);
-			requireInvariant firstKey(greater_byeKey);
-			requireInvariant firstKey(lesser_byeKey);
-			requireInvariant greaterContained(byeKey);
-			requireInvariant lesserContained(byeKey);	
-			requireInvariant reciprocal1(byeKey);
-			requireInvariant reciprocal2(byeKey);
-		*/
-
 	}
 
 
@@ -375,110 +322,18 @@ invariant reciprocal2(uint256 key) sinvoke contains(key) && sinvoke getElementGr
 
 	preserved remove(uint256 byeKey)
 	{
-		/*
-			uint256 greater_key = sinvoke getElementGreater(key);
-			uint256 lesser_key = sinvoke getElementLesser(key);
-			requireInvariant firstKey(key);
-			requireInvariant firstKey(greater_key);
-			requireInvariant firstKey(lesser_key);		
-			requireInvariant reciprocal1(key);
-			requireInvariant reciprocal2(key);
 
-			uint256 greater_key = sinvoke getElementGreater(key);
-			uint256 lesser_key = sinvoke getElementLesser(key);
-			requireInvariant firstKey(key);
-			requireInvariant firstKey(greater_key);
-			requireInvariant firstKey(lesser_key);
-			requireInvariant reciprocal1(key);
-			requireInvariant reciprocal2(key);
-		*/
-
-		call basicRemoveInstances(byeKey);
+		uint256 greater_byeKey, lesser_byeKey;
+		call basicRemoveInstances(byeKey, greater_byeKey, lesser_byeKey);
 		uint256 greater_key, lesser_key;
 		call extraRemoveInstance(key, greater_key, lesser_key);
-
-		/*
-
-			uint256 greater_byeKey = sinvoke getElementGreater(byeKey);
-			uint256 lesser_byeKey = sinvoke getElementLesser(byeKey);
-			requireInvariant hasHead2();
-			requireInvariant hasTail();
-			requireInvariant hasTail2();
-			requireInvariant firstKey(byeKey);
-			requireInvariant firstKey(greater_byeKey);
-			requireInvariant firstKey(lesser_byeKey);
-
-			requireInvariant greaterContained(byeKey);
-			requireInvariant lesserContained(byeKey);
-			requireInvariant reciprocal1(byeKey);
-			requireInvariant reciprocal2(byeKey);
-		*/
-
 	}
 
 
 	preserved update(uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey)
 	{
-		uint256 greater_key_before = sinvoke getElementGreater(key);
-		uint256 lesser_key_before = sinvoke getElementLesser(key);
-		uint256 greater_updateKey = sinvoke getElementGreater(updateKey);
-		uint256 lesser_updateKey = sinvoke getElementLesser(updateKey);
-		requireInvariant hasHead();
-		requireInvariant hasTwo(key, updateKey);
-		requireInvariant hasHead2();
-		requireInvariant hasTail();
-		requireInvariant hasTail2();
-		requireInvariant firstKey(updateKey);
-		requireInvariant firstKey(key);
-		requireInvariant firstKey(greater_key_before);
-		requireInvariant firstKey(lesser_key_before);
-		requireInvariant firstKey(greater_updateKey);
-		requireInvariant firstKey(lesser_updateKey);
+		call updateInstances(key, updateKey, value, lesserKey, greaterKey);
 
-		uint256 greater_lesser_key = sinvoke getElementGreater(lesserKey);
-		uint256 greater_greater_key = sinvoke getElementGreater(greaterKey);
-		uint256 lesser_lesser_key = sinvoke getElementLesser(lesserKey);
-		uint256 lesser_greater_key = sinvoke getElementLesser(greaterKey);
-		requireInvariant firstKey(greater_lesser_key);
-		requireInvariant firstKey(greater_greater_key);
-		requireInvariant firstKey(lesser_lesser_key);
-		requireInvariant firstKey(lesser_greater_key);
-		requireInvariant lastKey(greater_lesser_key);
-		requireInvariant lastKey(greater_greater_key);
-		requireInvariant lastKey(lesser_lesser_key);
-		requireInvariant lastKey(lesser_greater_key);
-
-		requireInvariant greaterContained(updateKey);
-		requireInvariant lesserContained(updateKey);
-		requireInvariant reciprocal1(updateKey);
-		requireInvariant reciprocal2(updateKey);
-
-		requireInvariant greaterContained(key);
-		requireInvariant lesserContained(key);
-		requireInvariant reciprocal1(key);
-		requireInvariant reciprocal2(key);
-
-		requireInvariant reciprocal1(lesserKey);
-		requireInvariant reciprocal2(lesserKey);
-		requireInvariant reciprocal1(greaterKey);
-		requireInvariant reciprocal2(greaterKey);
-
-		requireInvariant reciprocal1(greater_updateKey);
-		requireInvariant reciprocal1(lesser_updateKey);
-		requireInvariant reciprocal2(greater_updateKey);
-		requireInvariant reciprocal2(lesser_updateKey);
-		requireInvariant containsNotZero();
-		requireInvariant lastKey(key);
-		requireInvariant lastKey(updateKey);
-		requireInvariant lastKey(greater_key_before);
-		requireInvariant lastKey(lesser_key_before);
-		requireInvariant lastKey(greater_updateKey);
-		requireInvariant lastKey(lesser_updateKey);
-
-		requireInvariant isHead(key);
-		requireInvariant isHead(updateKey);
-		requireInvariant isHead(lesserKey);
-		requireInvariant isHead(greaterKey);
 
 		requireInvariant lesserContained(key);
 		requireInvariant lesserContained(updateKey);
@@ -488,103 +343,26 @@ invariant reciprocal2(uint256 key) sinvoke contains(key) && sinvoke getElementGr
 
 }
 
-
-
-
 // First invariant in document
 invariant firstKey(uint256 key) sinvoke contains(key) => (sinvoke getElementGreater(key) == 0 <=> key == sinvoke getHead()) 
 {
 	preserved update(uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey)
 	{
-		uint256 greater_key_before = sinvoke getElementGreater(key);
-		uint256 lesser_key_before = sinvoke getElementLesser(key);
-		uint256 greater_updateKey = sinvoke getElementGreater(updateKey);
-		uint256 lesser_updateKey = sinvoke getElementLesser(updateKey);
-		requireInvariant hasHead();
-		requireInvariant hasTwo(key, updateKey);
-		requireInvariant hasHead2();
-		requireInvariant hasTail();
-		requireInvariant hasTail2();
-		requireInvariant firstKey(updateKey);
-		requireInvariant firstKey(key);
-		requireInvariant firstKey(greater_key_before);
-		requireInvariant firstKey(lesser_key_before);
-		requireInvariant firstKey(greater_updateKey);
-		requireInvariant firstKey(lesser_updateKey);
-
-		uint256 greater_lesser_key = sinvoke getElementGreater(lesserKey);
-		uint256 greater_greater_key = sinvoke getElementGreater(greaterKey);
-		uint256 lesser_lesser_key = sinvoke getElementLesser(lesserKey);
-		uint256 lesser_greater_key = sinvoke getElementLesser(greaterKey);
-		requireInvariant firstKey(greater_lesser_key);
-		requireInvariant firstKey(greater_greater_key);
-		requireInvariant firstKey(lesser_lesser_key);
-		requireInvariant firstKey(lesser_greater_key);
-		requireInvariant lastKey(greater_lesser_key);
-		requireInvariant lastKey(greater_greater_key);
-		requireInvariant lastKey(lesser_lesser_key);
-		requireInvariant lastKey(lesser_greater_key);
-
-		requireInvariant greaterContained(updateKey);
-		requireInvariant lesserContained(updateKey);
-		requireInvariant reciprocal1(updateKey);
-		requireInvariant reciprocal2(updateKey);
-
-		requireInvariant greaterContained(key);
-		requireInvariant lesserContained(key);
-		requireInvariant reciprocal1(key);
-		requireInvariant reciprocal2(key);
-
-		requireInvariant reciprocal1(lesserKey);
-		requireInvariant reciprocal2(lesserKey);
-		requireInvariant reciprocal1(greaterKey);
-		requireInvariant reciprocal2(greaterKey);
-
-		requireInvariant reciprocal1(greater_updateKey);
-		requireInvariant reciprocal1(lesser_updateKey);
-		requireInvariant reciprocal2(greater_updateKey);
-		requireInvariant reciprocal2(lesser_updateKey);
-		requireInvariant containsNotZero();
-		requireInvariant lastKey(key);
-		requireInvariant lastKey(updateKey);
-		requireInvariant lastKey(greater_key_before);
-		requireInvariant lastKey(lesser_key_before);
-		requireInvariant lastKey(greater_updateKey);
-		requireInvariant lastKey(lesser_updateKey);
-
-		requireInvariant isHead(key);
-		requireInvariant isHead(updateKey);
-		requireInvariant isHead(lesserKey);
-		requireInvariant isHead(greaterKey);
+		call updateInstances(key, updateKey, value, lesserKey, greaterKey);
 	}
 
 	preserved remove(uint256 byeKey)
 	{
-		uint256 greater_key = sinvoke getElementGreater(key);
-		uint256 lesser_key = sinvoke getElementLesser(key);
-		uint256 greater_byeKey = sinvoke getElementGreater(byeKey);
-		uint256 lesser_byeKey = sinvoke getElementLesser(byeKey);
-		requireInvariant hasHead2();
-		requireInvariant hasTail();
-		requireInvariant hasTail2();
-		requireInvariant firstKey(byeKey);
-		requireInvariant firstKey(key);
-		requireInvariant firstKey(greater_key);
-		requireInvariant firstKey(lesser_key);
-		requireInvariant firstKey(greater_byeKey);
-		requireInvariant firstKey(lesser_byeKey);
-
-		requireInvariant greaterContained(byeKey);
-		requireInvariant lesserContained(byeKey);
-		
-		requireInvariant reciprocal1(byeKey);
-		requireInvariant reciprocal2(byeKey);
+		uint256 greater_byeKey, lesser_byeKey;
+		call basicRemoveInstances(byeKey, greater_byeKey, lesser_byeKey);
+		uint256 greater_key, lesser_key;
+		call extraRemoveInstance(key, greater_key, lesser_key);
 
 		requireInvariant reciprocal1(greater_byeKey);
 		requireInvariant reciprocal1(lesser_byeKey);
 		requireInvariant reciprocal2(greater_byeKey);
 		requireInvariant reciprocal2(lesser_byeKey);
-		requireInvariant containsNotZero();
+
 		requireInvariant lastKey(key);
 		requireInvariant lastKey(byeKey);
 		requireInvariant lastKey(greater_key);
@@ -680,10 +458,10 @@ rule basicInsertInstances(uint256 newKey, uint256 value, uint256 newLesserKey, u
 		requireInvariant greaterContained(newKey);
 }
 
-rule basicRemoveInstances(uint256 byeKey)
+rule basicRemoveInstances(uint256 byeKey, uint256 greater_byeKey, uint256 lesser_byeKey)
 {
-		uint256 greater_byeKey = sinvoke getElementGreater(byeKey);
-		uint256 lesser_byeKey = sinvoke getElementLesser(byeKey);
+		require greater_byeKey == sinvoke getElementGreater(byeKey);
+		require lesser_byeKey == sinvoke getElementLesser(byeKey);
 		requireInvariant hasHead2();
 		requireInvariant hasTail();
 		requireInvariant hasTail2();
@@ -719,4 +497,68 @@ rule basicInstances(uint256 key) {
 		requireInvariant lastKey(key);
 		requireInvariant isHead(key);
 		assert true;
+}
+
+rule updateInstances(uint256 key, uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey) {
+		uint256 greater_key_before = sinvoke getElementGreater(key);
+		uint256 lesser_key_before = sinvoke getElementLesser(key);
+		uint256 greater_updateKey = sinvoke getElementGreater(updateKey);
+		uint256 lesser_updateKey = sinvoke getElementLesser(updateKey);
+		requireInvariant hasHead();
+		requireInvariant hasTwo(key, updateKey);
+		requireInvariant hasHead2();
+		requireInvariant hasTail();
+		requireInvariant hasTail2();
+		requireInvariant firstKey(updateKey);
+		requireInvariant firstKey(key);
+		requireInvariant firstKey(greater_key_before);
+		requireInvariant firstKey(lesser_key_before);
+		requireInvariant firstKey(greater_updateKey);
+		requireInvariant firstKey(lesser_updateKey);
+
+		uint256 greater_lesser_key = sinvoke getElementGreater(lesserKey);
+		uint256 greater_greater_key = sinvoke getElementGreater(greaterKey);
+		uint256 lesser_lesser_key = sinvoke getElementLesser(lesserKey);
+		uint256 lesser_greater_key = sinvoke getElementLesser(greaterKey);
+		requireInvariant firstKey(greater_lesser_key);
+		requireInvariant firstKey(greater_greater_key);
+		requireInvariant firstKey(lesser_lesser_key);
+		requireInvariant firstKey(lesser_greater_key);
+		requireInvariant lastKey(greater_lesser_key);
+		requireInvariant lastKey(greater_greater_key);
+		requireInvariant lastKey(lesser_lesser_key);
+		requireInvariant lastKey(lesser_greater_key);
+
+		requireInvariant greaterContained(updateKey);
+		requireInvariant lesserContained(updateKey);
+		requireInvariant reciprocal1(updateKey);
+		requireInvariant reciprocal2(updateKey);
+
+		requireInvariant greaterContained(key);
+		requireInvariant lesserContained(key);
+		requireInvariant reciprocal1(key);
+		requireInvariant reciprocal2(key);
+
+		requireInvariant reciprocal1(lesserKey);
+		requireInvariant reciprocal2(lesserKey);
+		requireInvariant reciprocal1(greaterKey);
+		requireInvariant reciprocal2(greaterKey);
+
+		requireInvariant reciprocal1(greater_updateKey);
+		requireInvariant reciprocal1(lesser_updateKey);
+		requireInvariant reciprocal2(greater_updateKey);
+		requireInvariant reciprocal2(lesser_updateKey);
+		requireInvariant containsNotZero();
+		requireInvariant lastKey(key);
+		requireInvariant lastKey(updateKey);
+		requireInvariant lastKey(greater_key_before);
+		requireInvariant lastKey(lesser_key_before);
+		requireInvariant lastKey(greater_updateKey);
+		requireInvariant lastKey(lesser_updateKey);
+
+		requireInvariant isHead(key);
+		requireInvariant isHead(updateKey);
+		requireInvariant isHead(lesserKey);
+		requireInvariant isHead(greaterKey);
+
 }
