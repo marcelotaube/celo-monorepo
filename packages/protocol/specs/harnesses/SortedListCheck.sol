@@ -60,6 +60,6 @@ contract SortedListCheck {
 	}
 
 	function init_state() public {
-		l.list.numElements = 1;
+	
 	}
 }
