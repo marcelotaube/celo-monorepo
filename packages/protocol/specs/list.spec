@@ -21,21 +21,20 @@ invariant hasHead() sinvoke getHead() == 0 <=> sinvoke getNumElements() == 0
 	
 	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
 	{
-		uint256 dummyKey;
-
-		uint256 greater_key; uint256 lesser_key;
-		call basicInsertInstances(dummyKey, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+		call basicInsertInstances(newKey, value, newLesserKey, newGreaterKey);
 	}
 
 	preserved remove(uint256 byeKey)
 	{
 		// DIFFICULT ONE 
+		require false;
 	}
 
 
 	preserved update(uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey)
 	{
 		// DIFFICULT ONE 
+		require false;
 	}
 }
 
@@ -47,7 +46,8 @@ invariant lastKey(uint256 key) sinvoke contains(key) => (sinvoke getElementLesse
 		uint256 greater_lesser_key; uint256 greater_greater_key; uint256 lesser_lesser_key; uint256 lesser_greater_key;
 		call updateInstances(key, updateKey, value, lesserKey, greaterKey,
 		                     greater_key_before, lesser_key_before, greater_updateKey, lesser_updateKey,
-		                     greater_lesser_key, greater_greater_key, lesser_lesser_key, lesser_greater_key);	}
+		                     greater_lesser_key, greater_greater_key, lesser_lesser_key, lesser_greater_key);
+	}
 
 	preserved remove(uint256 byeKey)
 	{
@@ -181,7 +181,7 @@ invariant reciprocal1(uint256 key) sinvoke contains(key) && sinvoke getElementLe
 	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
 	{
 		uint256 greater_key; uint256 lesser_key;
-		call basicInsertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+		call insertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
 	}
 
 	preserved remove(uint256 byeKey)
@@ -218,7 +218,7 @@ invariant reciprocal2(uint256 key) sinvoke contains(key) && sinvoke getElementGr
 	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
 	{
 		uint256 greater_key; uint256 lesser_key;
-		call basicInsertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+		call insertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
 	}
 
 	preserved remove(uint256 byeKey)
@@ -258,7 +258,8 @@ invariant firstKey(uint256 key) sinvoke contains(key) => (sinvoke getElementGrea
 		uint256 greater_lesser_key; uint256 greater_greater_key; uint256 lesser_lesser_key; uint256 lesser_greater_key;
 		call updateInstances(key, updateKey, value, lesserKey, greaterKey,
 		                     greater_key_before, lesser_key_before, greater_updateKey, lesser_updateKey,
-		                     greater_lesser_key, greater_greater_key, lesser_lesser_key, lesser_greater_key);	}
+		                     greater_lesser_key, greater_greater_key, lesser_lesser_key, lesser_greater_key);
+	}
 
 	preserved remove(uint256 byeKey)
 	{
@@ -322,13 +323,138 @@ invariant firstKey(uint256 key) sinvoke contains(key) => (sinvoke getElementGrea
 
 
 invariant hasTwo(uint256 key1, uint256 key2) sinvoke contains(key1) && sinvoke contains(key2) && key1 != key2 => sinvoke getNumElements() >= 2
+{
+	
+	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
+	{
+		// DIFFICULT ONE
+		require false;
+		// Possible counter example includes having an element but no head and numElements==0
+		// Then after adding key2 we have numElements==1 contradicting the invariant
+		// When we have the ghost relation we will be able to force numElements==1 in initial state and then
+		// also we will have a head.
+
+		/*
+		uint256 greater_key; uint256 lesser_key;
+		call insertInstances(key1, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+
+		requireInvariant lesserContained(key2);
+		requireInvariant greaterContained(key2);
+		requireInvariant reciprocal1(key2);
+		requireInvariant reciprocal2(key2);
+		requireInvariant firstKey(key2);
+		uint256 greater_key2 = sinvoke getElementGreater(key2);
+		uint256 lesser_key2 = sinvoke getElementLesser(key2);
+		requireInvariant firstKey(greater_key2);
+		requireInvariant firstKey(lesser_key2);		
+		*/
+	}
+
+	preserved remove(uint256 byeKey)
+	{
+		// DIFFICULT ONE 
+		require false;
+	}
+
+
+	preserved update(uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey)
+	{
+		// DIFFICULT ONE 
+		require false;
+	}
+}
 
 invariant hasHead2() sinvoke getHead() != 0 <=> sinvoke contains(sinvoke getHead())
+{
+	
+	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
+	{
+		call basicInsertInstances(newKey, value, newLesserKey, newGreaterKey);
+	}
+
+
+	preserved remove(uint256 byeKey)
+	{
+		uint256 greater_byeKey;
+		uint256 lesser_byeKey;
+		call basicRemoveInstances(byeKey, greater_byeKey, lesser_byeKey);
+	}
+
+
+	preserved update(uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey)
+	{
+		uint256 greater_updateKey; uint256 lesser_updateKey;
+		uint256 greater_lesser_key; uint256 greater_greater_key; uint256 lesser_lesser_key; uint256 lesser_greater_key;
+		call basicUpdateInstances(updateKey, value, lesserKey, greaterKey,
+		                     	  greater_updateKey, lesser_updateKey,
+		                     	  greater_lesser_key, greater_greater_key, lesser_lesser_key, lesser_greater_key);
+
+		requireInvariant lesserContained(updateKey);
+		requireInvariant greaterContained(updateKey);
+	}
+
+}
 
 // 3rd
 invariant hasTail() sinvoke getHead() == 0 <=> sinvoke getTail() == 0
+{
+	
+	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
+	{
+		call basicInsertInstances(newKey, value, newLesserKey, newGreaterKey);
+	}
+
+	preserved remove(uint256 byeKey)
+	{
+
+		uint256 greater_byeKey;
+		uint256 lesser_byeKey;
+		call basicRemoveInstances(byeKey, greater_byeKey, lesser_byeKey);
+	}
+
+
+	preserved update(uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey)
+	{
+		uint256 greater_updateKey; uint256 lesser_updateKey;
+		uint256 greater_lesser_key; uint256 greater_greater_key; uint256 lesser_lesser_key; uint256 lesser_greater_key;
+		call basicUpdateInstances(updateKey, value, lesserKey, greaterKey,
+		                          greater_updateKey, lesser_updateKey,
+		                          greater_lesser_key, greater_greater_key, lesser_lesser_key, lesser_greater_key);
+
+		requireInvariant lesserContained(updateKey);
+		requireInvariant greaterContained(updateKey);
+	}
+}
 
 invariant hasTail2() sinvoke getTail() != 0 <=> sinvoke contains(sinvoke getTail())
+{
+	
+	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
+	{
+		call basicInsertInstances(newKey, value, newLesserKey, newGreaterKey);
+	}
+
+	preserved remove(uint256 byeKey)
+	{
+
+		uint256 greater_byeKey;
+		uint256 lesser_byeKey;
+		call basicRemoveInstances(byeKey, greater_byeKey, lesser_byeKey);
+	}
+
+
+	preserved update(uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey)
+	{
+		uint256 greater_updateKey; uint256 lesser_updateKey;
+		uint256 greater_lesser_key; uint256 greater_greater_key; uint256 lesser_lesser_key; uint256 lesser_greater_key;
+		call basicUpdateInstances(updateKey, value, lesserKey, greaterKey,
+		                     	  greater_updateKey, lesser_updateKey,
+		                     	  greater_lesser_key, greater_greater_key, lesser_lesser_key, lesser_greater_key);
+
+		requireInvariant lesserContained(updateKey);
+		requireInvariant greaterContained(updateKey);
+	}
+}
 
 // 4th
 invariant containsNotZero() !sinvoke contains(0)
@@ -340,7 +466,7 @@ invariant sortedTail(uint256 key) sinvoke contains(key) => sinvoke getValue(sinv
 	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
 	{
 		uint256 greater_key; uint256 lesser_key;
-		call basicInsertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+		call insertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
 	}
 
 	preserved remove(uint256 byeKey)
@@ -377,7 +503,7 @@ invariant sortedHead(uint256 key) sinvoke contains(key) => sinvoke getValue(sinv
 	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
 	{
 		uint256 greater_key; uint256 lesser_key;
-		call basicInsertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+		call insertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
 	}
 
 	preserved remove(uint256 byeKey)
@@ -415,7 +541,19 @@ invariant sortedGreater(uint256 key) sinvoke contains(key) && sinvoke getElement
 	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
 	{
 		uint256 greater_key; uint256 lesser_key;
-		call basicInsertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+		call insertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+		requireInvariant sortedLesser(key);
+		requireInvariant sortedLesser(newKey);
+		requireInvariant sortedLesser(newGreaterKey);
+		requireInvariant sortedLesser(newLesserKey);
+		requireInvariant sortedLesser(greater_key);
+		requireInvariant sortedLesser(lesser_key);
+		requireInvariant sortedGreater(key);
+		requireInvariant sortedGreater(newKey);
+		requireInvariant sortedGreater(newGreaterKey);
+		requireInvariant sortedGreater(newLesserKey);
+		requireInvariant sortedGreater(greater_key);
+		requireInvariant sortedGreater(lesser_key);
 	}
 
 	preserved remove(uint256 byeKey)
@@ -427,6 +565,19 @@ invariant sortedGreater(uint256 key) sinvoke contains(key) && sinvoke getElement
 		uint256 greater_key;
 		uint256 lesser_key;
 		call extraRemoveInstance(key, greater_key, lesser_key);
+
+		requireInvariant sortedLesser(byeKey);
+		requireInvariant sortedLesser(greater_byeKey);
+		requireInvariant sortedLesser(lesser_byeKey);
+		requireInvariant sortedLesser(key);
+		requireInvariant sortedLesser(greater_key);
+		requireInvariant sortedLesser(lesser_key);
+		requireInvariant sortedGreater(byeKey);
+		requireInvariant sortedGreater(greater_byeKey);
+		requireInvariant sortedGreater(lesser_byeKey);
+		requireInvariant sortedGreater(key);
+		requireInvariant sortedGreater(greater_key);
+		requireInvariant sortedGreater(lesser_key);
 	}
 
 
@@ -442,6 +593,33 @@ invariant sortedGreater(uint256 key) sinvoke contains(key) && sinvoke getElement
 		requireInvariant lesserContained(updateKey);
 		requireInvariant greaterContained(key);
 		requireInvariant greaterContained(updateKey);
+
+
+		requireInvariant sortedLesser(updateKey);
+		requireInvariant sortedLesser(greaterKey);
+		requireInvariant sortedLesser(lesserKey);
+		requireInvariant sortedLesser(key);
+		requireInvariant sortedLesser(greater_key_before);
+		requireInvariant sortedLesser(lesser_key_before);
+		requireInvariant sortedLesser(greater_updateKey);
+		requireInvariant sortedLesser(lesser_updateKey);
+		requireInvariant sortedLesser(greater_lesser_key);
+		requireInvariant sortedLesser(greater_greater_key);
+		requireInvariant sortedLesser(lesser_lesser_key);
+		requireInvariant sortedLesser(lesser_greater_key);
+
+		requireInvariant sortedGreater(updateKey);
+		requireInvariant sortedGreater(greaterKey);
+		requireInvariant sortedGreater(lesserKey);
+		requireInvariant sortedGreater(key);
+		requireInvariant sortedGreater(greater_key_before);
+		requireInvariant sortedGreater(lesser_key_before);
+		requireInvariant sortedGreater(greater_updateKey);
+		requireInvariant sortedGreater(lesser_updateKey);
+		requireInvariant sortedGreater(greater_lesser_key);
+		requireInvariant sortedGreater(greater_greater_key);
+		requireInvariant sortedGreater(lesser_lesser_key);
+		requireInvariant sortedGreater(lesser_greater_key);
 	}
 
 }
@@ -452,7 +630,19 @@ invariant sortedLesser(uint256 key) sinvoke contains(key) && sinvoke getElementL
 	preserved insert(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) 
 	{
 		uint256 greater_key; uint256 lesser_key;
-		call basicInsertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+		call insertInstances(key, newKey, value, newLesserKey, newGreaterKey, greater_key, lesser_key);
+		requireInvariant sortedLesser(key);
+		requireInvariant sortedLesser(newKey);
+		requireInvariant sortedLesser(newGreaterKey);
+		requireInvariant sortedLesser(newLesserKey);
+		requireInvariant sortedLesser(greater_key);
+		requireInvariant sortedLesser(lesser_key);
+		requireInvariant sortedGreater(key);
+		requireInvariant sortedGreater(newKey);
+		requireInvariant sortedGreater(newGreaterKey);
+		requireInvariant sortedGreater(newLesserKey);
+		requireInvariant sortedGreater(greater_key);
+		requireInvariant sortedGreater(lesser_key);
 	}
 
 	preserved remove(uint256 byeKey)
@@ -464,6 +654,18 @@ invariant sortedLesser(uint256 key) sinvoke contains(key) && sinvoke getElementL
 		uint256 greater_key;
 		uint256 lesser_key;
 		call extraRemoveInstance(key, greater_key, lesser_key);
+		requireInvariant sortedLesser(byeKey);
+		requireInvariant sortedLesser(greater_byeKey);
+		requireInvariant sortedLesser(lesser_byeKey);
+		requireInvariant sortedLesser(key);
+		requireInvariant sortedLesser(greater_key);
+		requireInvariant sortedLesser(lesser_key);
+		requireInvariant sortedGreater(byeKey);
+		requireInvariant sortedGreater(greater_byeKey);
+		requireInvariant sortedGreater(lesser_byeKey);
+		requireInvariant sortedGreater(key);
+		requireInvariant sortedGreater(greater_key);
+		requireInvariant sortedGreater(lesser_key);
 	}
 
 
@@ -479,13 +681,39 @@ invariant sortedLesser(uint256 key) sinvoke contains(key) && sinvoke getElementL
 		requireInvariant lesserContained(updateKey);
 		requireInvariant greaterContained(key);
 		requireInvariant greaterContained(updateKey);
+
+
+		requireInvariant sortedLesser(updateKey);
+		requireInvariant sortedLesser(greaterKey);
+		requireInvariant sortedLesser(lesserKey);
+		requireInvariant sortedLesser(key);
+		requireInvariant sortedLesser(greater_key_before);
+		requireInvariant sortedLesser(lesser_key_before);
+		requireInvariant sortedLesser(greater_updateKey);
+		requireInvariant sortedLesser(lesser_updateKey);
+		requireInvariant sortedLesser(greater_lesser_key);
+		requireInvariant sortedLesser(greater_greater_key);
+		requireInvariant sortedLesser(lesser_lesser_key);
+		requireInvariant sortedLesser(lesser_greater_key);
+
+		requireInvariant sortedGreater(updateKey);
+		requireInvariant sortedGreater(greaterKey);
+		requireInvariant sortedGreater(lesserKey);
+		requireInvariant sortedGreater(key);
+		requireInvariant sortedGreater(greater_key_before);
+		requireInvariant sortedGreater(lesser_key_before);
+		requireInvariant sortedGreater(greater_updateKey);
+		requireInvariant sortedGreater(lesser_updateKey);
+		requireInvariant sortedGreater(greater_lesser_key);
+		requireInvariant sortedGreater(greater_greater_key);
+		requireInvariant sortedGreater(lesser_lesser_key);
+		requireInvariant sortedGreater(lesser_greater_key);
 	}
 
 }
 
 
-rule basicInsertInstances(uint256 key, uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey,
-						  uint256 greater_key, uint256 lesser_key) {
+sub basicInsertInstances(uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey) {
 		requireInvariant hasHead();
 		requireInvariant hasHead2();
 		requireInvariant hasTail();
@@ -507,6 +735,12 @@ rule basicInsertInstances(uint256 key, uint256 newKey, uint256 value, uint256 ne
 
 		requireInvariant lesserContained(newKey);
 		requireInvariant greaterContained(newKey);
+}
+
+sub insertInstances(uint256 key, uint256 newKey, uint256 value, uint256 newLesserKey, uint256 newGreaterKey,
+					uint256 greater_key, uint256 lesser_key) {
+
+		call basicInsertInstances(newKey, value, newLesserKey, newGreaterKey);
 
 		requireInvariant lesserContained(key);
 		requireInvariant greaterContained(key);
@@ -517,11 +751,10 @@ rule basicInsertInstances(uint256 key, uint256 newKey, uint256 value, uint256 ne
 		requireInvariant firstKey(lesser_key);		
 		requireInvariant reciprocal1(key);
 		requireInvariant reciprocal2(key);
-		assert true;
 
 }
 
-rule basicRemoveInstances(uint256 byeKey, uint256 greater_byeKey, uint256 lesser_byeKey)
+sub basicRemoveInstances(uint256 byeKey, uint256 greater_byeKey, uint256 lesser_byeKey)
 {
 		require greater_byeKey == sinvoke getElementGreater(byeKey);
 		require lesser_byeKey == sinvoke getElementLesser(byeKey);
@@ -531,6 +764,9 @@ rule basicRemoveInstances(uint256 byeKey, uint256 greater_byeKey, uint256 lesser
 		requireInvariant firstKey(byeKey);
 		requireInvariant firstKey(greater_byeKey);
 		requireInvariant firstKey(lesser_byeKey);
+		requireInvariant lastKey(byeKey);
+		requireInvariant lastKey(greater_byeKey);
+		requireInvariant lastKey(lesser_byeKey);
 		requireInvariant greaterContained(byeKey);
 		requireInvariant lesserContained(byeKey);
 		requireInvariant reciprocal1(byeKey);
@@ -539,10 +775,9 @@ rule basicRemoveInstances(uint256 byeKey, uint256 greater_byeKey, uint256 lesser
 		requireInvariant lesserContained(byeKey);
 		requireInvariant lesserContained(greater_byeKey);
 		requireInvariant lesserContained(lesser_byeKey);
-		assert true;
 }
 
-rule extraRemoveInstance(uint256 key, uint256 greater_key, uint256 lesser_key) {
+sub extraRemoveInstance(uint256 key, uint256 greater_key, uint256 lesser_key) {
 		require greater_key == sinvoke getElementGreater(key);
 		require lesser_key == sinvoke getElementLesser(key);
 		requireInvariant firstKey(key);
@@ -550,28 +785,20 @@ rule extraRemoveInstance(uint256 key, uint256 greater_key, uint256 lesser_key) {
 		requireInvariant firstKey(lesser_key);		
 		requireInvariant reciprocal1(key);
 		requireInvariant reciprocal2(key);
-		assert true;
 }
 
-
-rule updateInstances(uint256 key, uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey,
-		             uint256 greater_key_before, uint256 lesser_key_before, uint256 greater_updateKey, uint256 lesser_updateKey,
-		             uint256 greater_lesser_key, uint256 greater_greater_key, uint256 lesser_lesser_key, uint256 lesser_greater_key) {
-		require greater_key_before == sinvoke getElementGreater(key);
-		require lesser_key_before == sinvoke getElementLesser(key);
+sub basicUpdateInstances(uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey,
+   		             	 uint256 greater_updateKey, uint256 lesser_updateKey,
+		             	 uint256 greater_lesser_key, uint256 greater_greater_key, uint256 lesser_lesser_key, uint256 lesser_greater_key) {
 		require greater_updateKey == sinvoke getElementGreater(updateKey);
 		require lesser_updateKey == sinvoke getElementLesser(updateKey);
 		requireInvariant hasHead();
-		requireInvariant hasTwo(key, updateKey);
 		requireInvariant hasHead2();
 		requireInvariant hasTail();
 		requireInvariant hasTail2();
 		requireInvariant firstKey(updateKey);
-		requireInvariant firstKey(key);
 		requireInvariant firstKey(greaterKey);
 		requireInvariant firstKey(lesserKey);
-		requireInvariant firstKey(greater_key_before);
-		requireInvariant firstKey(lesser_key_before);
 		requireInvariant firstKey(greater_updateKey);
 		requireInvariant firstKey(lesser_updateKey);
 
@@ -593,10 +820,6 @@ rule updateInstances(uint256 key, uint256 updateKey, uint256 value, uint256 less
 		requireInvariant reciprocal1(updateKey);
 		requireInvariant reciprocal2(updateKey);
 
-		requireInvariant greaterContained(key);
-		requireInvariant lesserContained(key);
-		requireInvariant reciprocal1(key);
-		requireInvariant reciprocal2(key);
 
 		requireInvariant reciprocal1(lesserKey);
 		requireInvariant reciprocal2(lesserKey);
@@ -608,14 +831,36 @@ rule updateInstances(uint256 key, uint256 updateKey, uint256 value, uint256 less
 		requireInvariant reciprocal2(greater_updateKey);
 		requireInvariant reciprocal2(lesser_updateKey);
 		requireInvariant containsNotZero();
-		requireInvariant lastKey(key);
+		
 		requireInvariant lastKey(updateKey);
 		requireInvariant lastKey(greaterKey);
 		requireInvariant lastKey(lesserKey);
-		requireInvariant lastKey(greater_key_before);
-		requireInvariant lastKey(lesser_key_before);
 		requireInvariant lastKey(greater_updateKey);
 		requireInvariant lastKey(lesser_updateKey);
+}
 
-		assert true;
+sub updateInstances(uint256 key, uint256 updateKey, uint256 value, uint256 lesserKey, uint256 greaterKey,
+		             uint256 greater_key_before, uint256 lesser_key_before, uint256 greater_updateKey, uint256 lesser_updateKey,
+		             uint256 greater_lesser_key, uint256 greater_greater_key, uint256 lesser_lesser_key, uint256 lesser_greater_key) {
+
+
+		requireInvariant hasTwo(key, updateKey);
+		requireInvariant firstKey(key);
+		requireInvariant greaterContained(key);
+		requireInvariant lesserContained(key);
+		requireInvariant reciprocal1(key);
+		requireInvariant reciprocal2(key);
+        requireInvariant lastKey(key);
+
+		require greater_key_before == sinvoke getElementGreater(key);
+		require lesser_key_before == sinvoke getElementLesser(key);
+		requireInvariant firstKey(greater_key_before);
+		requireInvariant lastKey(greater_key_before);
+		requireInvariant firstKey(lesser_key_before);
+		requireInvariant lastKey(lesser_key_before);
+
+		call basicUpdateInstances(updateKey, value, lesserKey, greaterKey,
+		                          greater_updateKey, lesser_updateKey,
+		             			  greater_lesser_key, greater_greater_key,
+		             			  lesser_lesser_key, lesser_greater_key);
 }
